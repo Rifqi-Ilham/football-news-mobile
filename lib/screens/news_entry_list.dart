@@ -75,7 +75,7 @@ class _NewsEntryListPageState extends State<NewsEntryListPage> {
             );
           }
 
-          // TAMPILKAN LIST
+          // TAMPILKAN LIST wow
           return ListView.builder(
             itemCount: snapshot.data.length,
             itemBuilder: (_, index) => NewsEntryCard(
