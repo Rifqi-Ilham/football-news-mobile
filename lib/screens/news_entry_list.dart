@@ -57,7 +57,7 @@ class _NewsEntryListPageState extends State<NewsEntryListPage> {
             );
           }
 
-          // LOADING STATE
+          // LOADING STATE test
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
