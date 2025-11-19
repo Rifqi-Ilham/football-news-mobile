@@ -47,38 +47,50 @@ class _NewsEntryListPageState extends State<NewsEntryListPage> {
       body: FutureBuilder(
         future: fetchNews(request),
         builder: (context, AsyncSnapshot snapshot) {
-          if (snapshot.data == null) {
-            return const Center(child: CircularProgressIndicator());
-          } else {
-            if (!snapshot.hasData) {
-              return const Column(
-                children: [
-                  Text(
-                    'There are no news in football news yet.',
-                    style: TextStyle(fontSize: 20, color: Color(0xff59A5D8)),
-                  ),
-                  SizedBox(height: 8),
-                ],
-              );
-            } else {
-              return ListView.builder(
-                itemCount: snapshot.data!.length,
-                itemBuilder: (_, index) => NewsEntryCard(
-                  news: snapshot.data![index],
-                  onTap: () {
-                    // Show a snackbar when news card is clicked
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            NewsDetailPage(news: snapshot.data![index]),
-                      ),
-                    );
-                  },
-                ),
-              );
-            }
+          // CEK ERROR
+          if (snapshot.hasError) {
+            return Center(
+              child: Text(
+                "Error: ${snapshot.error}",
+                style: TextStyle(color: Colors.red),
+              ),
+            );
           }
+
+          // LOADING STATE
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          // DATA KOSONG
+          if (!snapshot.hasData || snapshot.data.isEmpty) {
+            return const Column(
+              children: [
+                Text(
+                  'There are no news in football news yet.',
+                  style: TextStyle(fontSize: 20, color: Color(0xff59A5D8)),
+                ),
+                SizedBox(height: 8),
+              ],
+            );
+          }
+
+          // TAMPILKAN LIST
+          return ListView.builder(
+            itemCount: snapshot.data.length,
+            itemBuilder: (_, index) => NewsEntryCard(
+              news: snapshot.data[index],
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        NewsDetailPage(news: snapshot.data[index]),
+                  ),
+                );
+              },
+            ),
+          );
         },
       ),
     );
